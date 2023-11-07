@@ -1,11 +1,10 @@
 import re
 
-with open("test_input.txt") as f:
+with open("input.txt") as f:
     lines = f.readlines()
 
-
 class Node:
-    def __init__(self, is_file, path, parent, size=0, content=[]):
+    def __init__(self, is_file, path, parent, size=None, content=[]):
         self.is_file = is_file
         self.path = path
         self.parent = parent
@@ -16,14 +15,25 @@ class Node:
         self.content.append(folder)
 
     def get_size(self):
-        if self.is_file:
+        if self.size != None:
             return self.size
-        size = self.size
+        size = 0
         for sub in self.content:
             size += sub.get_size()
+        if size < 100_000:
+          print(size)
+        # if size >= 4_274_331:
+        #   print(size)
         self.size = size
-        return self.size
-
+        return size
+    
+    def print_content(self):
+        if self.is_file:
+            return self.path + "\n"
+        result = self.path + "\n"
+        for sub in self.content:
+            result = result + sub.print_content()
+        return result
 
 root = Node(is_file=False, path="/", parent=None)
 current_folder = root
@@ -70,6 +80,9 @@ for i, _ in enumerate(lines):
         )
 
 total = 0
-for item in root.content:
-    total += item.get_size()
-print(total)
+# print(root.get_size())
+30_000_000 - (70_000_000 - root.get_size())
+# print(root.print_content())
+
+## Part 1: 1915606
+## Part 2: 5025657
