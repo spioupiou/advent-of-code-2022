@@ -1,16 +1,13 @@
 with open('input.txt') as f:
   lines = f.readlines()
 
-x_values = []
 x = 1
-x_values.append(x)
+x_values = [x]
 
 for line in lines:
   command, *value = line.strip('\n').split(' ')
-  if command == "noop":
-    x_values.append(x)
-  else:
-    x_values.append(x)
+  x_values.append(x)
+  if command == "addx":
     x += int(*value)
     x_values.append(x)
 
