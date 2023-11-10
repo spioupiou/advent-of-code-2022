@@ -17,21 +17,7 @@ print(tail_coordinates[-1])
 
 def move_tail(hX, hY):
   tX, tY = tail_coordinates[-1]
-  if hX != tX and hY - tY > 1:
-    tail_coordinates.append(head_coordinates[-2])
-  elif hY != tY and tX - hX > 1:
-    tail_coordinates.append(head_coordinates[-2])
-  elif hY != tY and hX - tX > 1:
-    tail_coordinates.append(head_coordinates[-2])
-  elif hX != tX and tY - hY > 1:
-    tail_coordinates.append(head_coordinates[-2])
-  elif hX - tX > 1:
-    tail_coordinates.append(head_coordinates[-2])
-  elif hY - tY > 1:
-    tail_coordinates.append(head_coordinates[-2])
-  elif tX - hX > 1:
-    tail_coordinates.append(head_coordinates[-2])
-  elif tY - hY > 1:
+  if abs(hX - tX) > 1 or abs(hY - tY) > 1:
     tail_coordinates.append(head_coordinates[-2])
    
 for line in lines:
@@ -49,6 +35,5 @@ for line in lines:
       print(tail_coordinates[-1])
   print("\n")
 
-# 13 with test
 # 6269       
 print(len(set(tail_coordinates)))
