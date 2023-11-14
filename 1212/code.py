@@ -1,6 +1,6 @@
 import re
 
-with open("test_input.txt") as f:
+with open("input.txt") as f:
     lines = f.readlines()
 
 class Point:
@@ -23,7 +23,7 @@ class Point:
         return self.x == end.x and self.y == end.y
     
     def can_move_to(self, point):
-        return abs(height_map[point.coordinates()] - height_map[self.coordinates()] <= 1)
+        return height_map[point.coordinates()] - height_map[self.coordinates()] <= 1
 
 start: Point
 end: Point
@@ -41,21 +41,25 @@ for i, line in enumerate(lines):
                 height = 25
                 end = here
             case default:
-                height = ord(char)-97
+                height = ord(char)-ord('a')
         height_map[here.coordinates()] = height
 
+class PointWithStep:
+    def __init__(self, point: Point, step: int):
+        self.point = point
+        self.step = step
 
 def find_shortest_path(start: Point, end: Point):
     # Create a queue of points to visit + set of visited points
     # Add the starting point to the queue and visited set
-    queue = [start]
+    queue = [PointWithStep(start, 0)]
     visited = set([start])
-    step = 0
     
     # Until the queue is emptied:
     while queue:
         # Dequeue the first point
-        current = queue.pop(0)
+        point_with_step = queue.pop(0)
+        current, step = point_with_step.point, point_with_step.step
         if current.coordinates() not in visited:
             visited.add(current.coordinates())
             # Find adjacent points
@@ -66,11 +70,19 @@ def find_shortest_path(start: Point, end: Point):
                     filtered_adjacent_points.append(point)
             # For each adjacent point:
             for point in filtered_adjacent_points:
-                # If the point is the target point, return true
+                # If the point is the target point, return true (increment step by 1 because we need to move to the goal)
                 if point.is_goal():
                     return step + 1
-                # Otherwise append to queue
-                queue.append(point)
-                step += 1
+                # Otherwise increment the step needed to reach that point by 1 and append to queue
+                queue.append(PointWithStep(point, step + 1))
 
+# Part 1
 print(find_shortest_path(start, end))
+
+# Part 2
+paths = []
+for k, v in height_map:
+    if height_map[k, v] == 0:
+        paths.append(find_shortest_path(Point(k, v), end))
+
+print(min(filter(lambda x: x is not None, paths)))
