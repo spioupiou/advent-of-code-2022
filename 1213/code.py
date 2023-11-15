@@ -29,12 +29,11 @@ def compare(left, right):
         if left == right:
             return 0
         for i, _ in enumerate(left):
-            try:
-                result = compare(left[i], right[i])
-                if result == 1 or result == -1:
-                    return result
-            except IndexError:
+            if i >= len(right):
                 return -1
+            result = compare(left[i], right[i])
+            if result == 1 or result == -1:
+                return result
     return 1
 
 
