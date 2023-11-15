@@ -1,6 +1,6 @@
 import json
 
-with open("test_input.txt") as f:
+with open("input.txt") as f:
     lines = f.readlines()
 
 signals = []
@@ -12,6 +12,8 @@ for i, _ in enumerate(lines):
     signals.append(nested_list)
 
 def compare(left, right):
+    # print("left:", left)
+    # print("right:", right)
     if type(left) == type(right) == int:
         if left < right:
             return 1
@@ -24,6 +26,8 @@ def compare(left, right):
     elif type(right) == int:
         return compare(left, [right])
     else:
+        if left == right:
+            return 0
         for i, _ in enumerate(left):
             try:
                 result = compare(left[i], right[i])
@@ -43,7 +47,7 @@ for left, right in zip(signals[0::2], signals[1::2]):
     i+=1
 
 print(sum(correct))
-
+print (compare([1],[1]))
 
             
 
