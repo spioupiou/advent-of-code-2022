@@ -1,6 +1,6 @@
 import re
 
-with open("test_input.txt") as f:
+with open("input.txt") as f:
     lines = f.readlines()
 
 def find_points_between(start, end: tuple):
@@ -32,8 +32,7 @@ for i, _ in enumerate(lines):
     for j in range(1, len(coordinates)):
         start, end = tuple(int(num) for num in coordinates[j-1].split(',')), tuple(int(num) for num in (coordinates[j].split(',')))
 
-        in_between = find_points_between(start, end)
-        for point in in_between:
+        for point in find_points_between(start, end):
             path.add(point)
     rocks.extend(path)
 
