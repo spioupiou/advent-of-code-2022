@@ -1,6 +1,6 @@
 import re
 
-def find_points_between(start, end: tuple):
+def find_points_between(start, end: tuple) -> list:
     points = []
 
     # Check if the x-coordinates are the same (vertical line)
@@ -20,7 +20,7 @@ def find_points_between(start, end: tuple):
 
     return points
 
-def add_sand():
+def add_sand(bottom_max: int) -> tuple:
     sand = (500, 0)
     while sand[1] <= bottom_max:
         # down
@@ -34,6 +34,15 @@ def add_sand():
             sand = (sand[0]+1, sand[1]+1)
         else: # sand is stuck
             return sand
+        
+def part_1(bottom_max: int):
+    sand_units = 0
+    new_sand = add_sand(bottom_max=bottom_max)
+    while new_sand != None:
+        rocks.append((new_sand[0], new_sand[1]))
+        sand_units +=1
+        new_sand = add_sand(bottom_max=bottom_max)
+    return sand_units        
 
 
 with open("input.txt") as f:
@@ -57,13 +66,4 @@ bottom_max = max(rocks, key=lambda p: p[1])[1]
 
 
 
-def part_1():
-    sand_units = 0
-    new_sand = add_sand()
-    while new_sand != None:
-        rocks.append((new_sand[0], new_sand[1]))
-        sand_units +=1
-        new_sand = add_sand()
-    return sand_units
-
-print(part_1())
+print(part_1(bottom_max=bottom_max))
