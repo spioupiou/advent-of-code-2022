@@ -41,7 +41,7 @@ def create_rocks(input_file_name: str) -> list:
     return rocks    
 
 
-def add_sand(bottom_max: int) -> tuple:
+def add_sand(rocks: list, bottom_max: int) -> tuple:
     sand = (500, 0)
     while sand[1] <= bottom_max:
         # down
@@ -56,18 +56,16 @@ def add_sand(bottom_max: int) -> tuple:
         else: # sand is stuck
             return sand
         
-def part_1(bottom_max: int):
+def part_1(rocks: list):
+    bottom_max = max(rocks, key=lambda p: p[1])[1]
     sand_units = 0
-    new_sand = add_sand(bottom_max=bottom_max)
+    new_sand = add_sand(rocks=rocks, bottom_max=bottom_max)
     while new_sand != None:
         rocks.append((new_sand[0], new_sand[1]))
         sand_units +=1
-        new_sand = add_sand(bottom_max=bottom_max)
+        new_sand = add_sand(rocks=rocks, bottom_max=bottom_max)
     return sand_units        
 
 
 rocks = create_rocks(input_file_name="input.txt")
-
-bottom_max = max(rocks, key=lambda p: p[1])[1]
-
-print(part_1(bottom_max=bottom_max))
+print(part_1(rocks=rocks))
