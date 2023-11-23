@@ -55,7 +55,21 @@ def add_sand(blocks: list, bottom_max: int) -> tuple:
             sand = (sand[0]+1, sand[1]+1)
         else: # sand is stuck
             return sand
-    return None    
+    return sand   
+
+def show_blocks(blocks: list):
+    x_base = min(blocks, key=lambda p: p[0])[0]
+    y_base = max(blocks, key=lambda p: p[1])[1]
+    x_size = max(blocks, key=lambda p: p[0])[0] - x_base + 1
+    y_size = y_base + 1
+    for y in range(y_size):
+        for x in range(x_size):
+            if (x_base + x, y) in blocks:
+                print('#', end='')
+            else:
+                print('.', end='')
+        print()
+
         
 def part_1(blocks: list):
     bottom_max = max(blocks, key=lambda p: p[1])[1]
@@ -65,8 +79,22 @@ def part_1(blocks: list):
         blocks.append(new_sand)
         sand_units +=1
         new_sand = add_sand(blocks=blocks, bottom_max=bottom_max)
-    return sand_units        
+    return sand_units      
+
+def part_2(blocks: list):
+    bottom_max = max(blocks, key=lambda p: p[1])[1]
+    sand_units = 0
+    new_sand = add_sand(blocks=blocks, bottom_max=bottom_max)
+    while new_sand != (500, 0):
+        #show_blocks(blocks)
+        #print()
+        #print(sand_units)
+        print(len(set(blocks)))
+        blocks.append(new_sand)
+        sand_units +=1
+        new_sand = add_sand(blocks=blocks, bottom_max=bottom_max)    
+    return sand_units + 1
 
 
 blocks = create_blocks(input_file_name="input.txt")
-print(part_1(blocks=blocks))
+print(part_2(blocks=blocks))
