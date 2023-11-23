@@ -62,7 +62,7 @@ def part_1(blocks: list):
     sand_units = 0
     new_sand = add_sand(blocks=blocks, bottom_max=bottom_max)
     while new_sand != None:
-        blocks.append((new_sand[0], new_sand[1]))
+        blocks.append(new_sand)
         sand_units +=1
         new_sand = add_sand(blocks=blocks, bottom_max=bottom_max)
     return sand_units        
