@@ -1,8 +1,5 @@
 import re
 
-with open("input.txt") as f:
-    lines = f.readlines()
-
 def find_points_between(start, end: tuple):
     points = []
 
@@ -23,6 +20,26 @@ def find_points_between(start, end: tuple):
 
     return points
 
+def add_sand():
+    sand = (500, 0)
+    while sand[1] <= bottom_max:
+        # down
+        if (sand[0], sand[1]+1) not in rocks:
+            sand = (sand[0], sand[1]+1)
+        # left down
+        elif (sand[0]-1, sand[1]+1) not in rocks:
+            sand = (sand[0]-1, sand[1]+1)
+        # right down
+        elif (sand[0]+1, sand[1]+1) not in rocks:
+            sand = (sand[0]+1, sand[1]+1)
+        else: # sand is stuck
+            return sand
+
+
+with open("input.txt") as f:
+    lines = f.readlines()
+
+
 rocks = []
 for i, _ in enumerate(lines):
     line = lines[i].strip('\n')
@@ -38,20 +55,7 @@ for i, _ in enumerate(lines):
 
 bottom_max = max(rocks, key=lambda p: p[1])[1]
 
-def add_sand():
-    sand = (500, 0)
-    while sand[1] <= bottom_max:
-        # down
-        if (sand[0], sand[1]+1) not in rocks:
-            sand = (sand[0], sand[1]+1)
-        # left down
-        elif (sand[0]-1, sand[1]+1) not in rocks:
-            sand = (sand[0]-1, sand[1]+1)
-        # right down
-        elif (sand[0]+1, sand[1]+1) not in rocks:
-            sand = (sand[0]+1, sand[1]+1)
-        else: # sand is stuck
-            return sand
+
 
 def part_1():
     sand_units = 0
