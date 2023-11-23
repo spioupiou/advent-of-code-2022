@@ -55,6 +55,7 @@ def add_sand(blocks: list, bottom_max: int) -> tuple:
             sand = (sand[0]+1, sand[1]+1)
         else: # sand is stuck
             return sand
+    return None    
         
 def part_1(blocks: list):
     bottom_max = max(blocks, key=lambda p: p[1])[1]
