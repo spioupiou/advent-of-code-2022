@@ -49,12 +49,12 @@ def add_sand(blocks: dict, bottom_max: int) -> tuple:
         y_first_block = min([y_block for y_block in blocks[x] if y_block > y])
         # check if sand can fall to left
         if x - 1 not in blocks.keys():
-            sand = (x - 1, bottom_max)
+            return (x - 1, bottom_max)
         elif y_first_block not in blocks[x - 1]:
             sand = (x - 1, y_first_block)
         # check if sand can fall to right
         elif x + 1 not in blocks.keys():
-            sand = (x + 1, bottom_max)     
+            return (x + 1, bottom_max)     
         elif y_first_block not in blocks[x + 1]:
             sand = (x + 1, y_first_block)
         else:
