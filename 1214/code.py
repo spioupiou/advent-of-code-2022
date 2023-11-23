@@ -20,6 +20,27 @@ def find_points_between(start, end: tuple) -> list:
 
     return points
 
+def create_rocks(input_file_name: str) -> list:
+    with open(input_file_name) as f:
+        lines = f.readlines()
+
+
+    rocks = []
+    for i, _ in enumerate(lines):
+        line = lines[i].strip('\n')
+        coordinates = re.findall(r"[^->\s]+", line)
+
+        path = set()
+        for j in range(1, len(coordinates)):
+            start, end = tuple(int(num) for num in coordinates[j-1].split(',')), tuple(int(num) for num in (coordinates[j].split(',')))
+
+            for point in find_points_between(start, end):
+                path.add(point)
+        rocks.extend(path)
+
+    return rocks    
+
+
 def add_sand(bottom_max: int) -> tuple:
     sand = (500, 0)
     while sand[1] <= bottom_max:
@@ -45,25 +66,8 @@ def part_1(bottom_max: int):
     return sand_units        
 
 
-with open("input.txt") as f:
-    lines = f.readlines()
-
-
-rocks = []
-for i, _ in enumerate(lines):
-    line = lines[i].strip('\n')
-    coordinates = re.findall(r"[^->\s]+", line)
-
-    path = set()
-    for j in range(1, len(coordinates)):
-        start, end = tuple(int(num) for num in coordinates[j-1].split(',')), tuple(int(num) for num in (coordinates[j].split(',')))
-
-        for point in find_points_between(start, end):
-            path.add(point)
-    rocks.extend(path)
+rocks = create_rocks(input_file_name="input.txt")
 
 bottom_max = max(rocks, key=lambda p: p[1])[1]
-
-
 
 print(part_1(bottom_max=bottom_max))
