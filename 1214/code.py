@@ -1,5 +1,7 @@
 import re
 
+start_point = (500, 0)
+
 def find_points_between(start, end: tuple) -> list:
     points = []
 
@@ -20,26 +22,6 @@ def find_points_between(start, end: tuple) -> list:
 
     return points
 
-def create_blocks_2(input_file_name: str) -> list:
-    with open(input_file_name) as f:
-        lines = f.readlines()
-
-
-    blocks = []
-    for i, _ in enumerate(lines):
-        line = lines[i].strip('\n')
-        coordinates = re.findall(r"[^->\s]+", line)
-
-        path = set()
-        for j in range(1, len(coordinates)):
-            start, end = tuple(int(num) for num in coordinates[j-1].split(',')), tuple(int(num) for num in (coordinates[j].split(',')))
-
-            for point in find_points_between(start, end):
-                path.add(point)
-        blocks.extend(path)
-
-    return blocks    
-
 def create_blocks(input_file_name: str) -> dict:
     with open(input_file_name) as f:
         lines = f.readlines()
@@ -52,26 +34,19 @@ def create_blocks(input_file_name: str) -> dict:
         for j in range(1, len(coordinates)):
             start, end = tuple(int(num) for num in coordinates[j-1].split(',')), tuple(int(num) for num in (coordinates[j].split(',')))
 
-            for point in find_points_between(start, end):
-                if point[0] not in blocks.keys():
-                    blocks[point[0]] = []
-                blocks[point[0]].append(point[1])
-    
-    sorted_blocks = {}
-    for key, value in blocks.items():
-        sorted_blocks[key] =  sorted(list(set(value)),reverse=True)           
+            for x, y in find_points_between(start, end):
+                if x not in blocks.keys():
+                    blocks[x] = set()
+                blocks[x].add(y)        
 
-    return sorted_blocks
+    return blocks
 
 def add_sand(blocks: dict, bottom_max: int) -> tuple:
-    sand = (500, 0)
+    sand = start_point
 
     while sand[1] < bottom_max:
         x, y = sand
-        if x not in blocks.keys():
-            return (x, bottom_max)
-        y_blocks = [y_block for y_block in blocks[x] if y_block > y]
-        y_first_block = y_blocks[-1]
+        y_first_block = min([y_block for y_block in blocks[x] if y_block > y])
         # check if sand can fall to left
         if x - 1 not in blocks.keys():
             sand = (x - 1, bottom_max)
@@ -88,12 +63,12 @@ def add_sand(blocks: dict, bottom_max: int) -> tuple:
 
 
 def get_max_depth(blocks: dict) -> int:
-    max = 0
-    for value in blocks.values():
-        max_in_value = value[0]
-        if max_in_value > max:
-            max = max_in_value
-    return max        
+    max_depth = 0
+    for values in blocks.values():
+        max_depth_in_values = max(values)
+        if max_depth_in_values > max_depth:
+            max_depth = max_depth_in_values
+    return max_depth        
 
 
 def show_blocks(blocks: dict):
@@ -122,17 +97,13 @@ def part_1(blocks: list):
 def part_2(blocks: dict):
     bottom_max = get_max_depth(blocks) + 1
     sand_units = 0
-    show_blocks(blocks)
-    print()
     new_sand = add_sand(blocks=blocks, bottom_max=bottom_max)
-    while new_sand != (500, 0):
+    while new_sand != start_point:
         x, y = new_sand
         if x not in blocks.keys():
-            blocks[x] = []
-        blocks[x].append(y)
-        blocks[x].sort(reverse=True)
-        show_blocks(blocks)
-        print()    
+            blocks[x] = set()
+        blocks[x].add(y)
+        #show_blocks(blocks=blocks)
         sand_units +=1
         new_sand = add_sand(blocks=blocks, bottom_max=bottom_max)  
     return sand_units + 1
