@@ -103,10 +103,11 @@ def part_2(blocks: dict):
         if x not in blocks.keys():
             blocks[x] = set()
         blocks[x].add(y)
-        #show_blocks(blocks=blocks)
+        show_blocks(blocks=blocks)
+        print()
         sand_units +=1
         new_sand = add_sand(blocks=blocks, bottom_max=bottom_max)  
     return sand_units + 1
 
-blocks = create_blocks(input_file_name="input.txt")
+blocks = create_blocks(input_file_name="test_input.txt")
 print(part_2(blocks=blocks))
